@@ -1,9 +1,11 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "(qs-1nltbq5f8) OpenShift, License: Apache 2.0 (Please do not remove) November, 29, 2017",
+    "Description": "(qs-1nltbq5f8) OpenShift, License: Apache 2.0 (Please do
+not remove) November, 29, 2017",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
-            "ParameterGroups": [{
+            "ParameterGroups": [
+                {
                     "Label": {
                         "default": "Network Configuration"
                     },
@@ -148,91 +150,156 @@
                     "default": "Number of Nodes"
                 }
             }
+        },
+        "AWS::CloudFormation::Designer": {
+            "4b951f62-12af-4285-83b7-cf075fe4f9a8": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "bf5c614e-f1a0-44be-ac3d-0c31cd08725f": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [],
+                "isrelatedto": [
+                    "4b951f62-12af-4285-83b7-cf075fe4f9a8"
+                ]
+            }
         }
     },
     "Parameters": {
         "AvailabilityZones": {
-            "Description": "List of Availability Zones to use for the subnets in the VPC. Three Availability Zones are used for this deployment, and the logical order of your selections is preserved.",
+            "Description": "List of Availability Zones to use for the subnets
+in the VPC. Three Availability Zones are used for this deployment, and the
+logical order of your selections is preserved.",
             "Type": "List<AWS::EC2::AvailabilityZone::Name>"
         },
         "KeyPairName": {
-            "Description": "The name of an existing public/private key pair, which allows you to securely connect to your instance after it launches",
+            "Description": "The name of an existing public/private key pair,
+which allows you to securely connect to your instance after it launches",
             "Type": "AWS::EC2::KeyPair::KeyName"
         },
         "PrivateSubnet1CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/16-28",
             "Default": "10.0.0.0/19",
-            "Description": "CIDR block for private subnet 1 located in Availability Zone 1",
+            "Description": "CIDR block for private subnet 1 located in
+Availability Zone 1",
             "Type": "String"
         },
         "PrivateSubnet2CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/16-28",
             "Default": "10.0.32.0/19",
-            "Description": "CIDR block for private subnet 2 located in Availability Zone 2",
+            "Description": "CIDR block for private subnet 2 located in
+Availability Zone 2",
             "Type": "String"
         },
         "PrivateSubnet3CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/16-28",
             "Default": "10.0.64.0/19",
-            "Description": "CIDR block for private subnet 2 located in Availability Zone 3",
+            "Description": "CIDR block for private subnet 2 located in
+Availability Zone 3",
             "Type": "String"
         },
         "PublicSubnet1CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/16-28",
             "Default": "10.0.128.0/20",
-            "Description": "CIDR block for the public (DMZ) subnet 1 located in Availability Zone 1",
+            "Description": "CIDR block for the public (DMZ) subnet 1 located
+in Availability Zone 1",
             "Type": "String"
         },
         "PublicSubnet2CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/16-28",
             "Default": "10.0.144.0/20",
-            "Description": "CIDR block for the public (DMZ) subnet 2 located in Availability Zone 2",
+            "Description": "CIDR block for the public (DMZ) subnet 2 located
+in Availability Zone 2",
             "Type": "String"
         },
         "PublicSubnet3CIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/16-28",
             "Default": "10.0.160.0/20",
-            "Description": "CIDR block for the public (DMZ) subnet 2 located in Availability Zone 3",
+            "Description": "CIDR block for the public (DMZ) subnet 2 located
+in Availability Zone 3",
             "Type": "String"
         },
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
-            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "ConstraintDescription": "Quick Start bucket name can include
+numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot
+start or end with a hyphen (-).",
             "Default": "quickstart-reference",
-            "Description": "S3 bucket name for the Quick Start assets. This string can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Description": "S3 bucket name for the Quick Start assets. This
+string can include numbers, lowercase letters, uppercase letters, and hyphens
+(-). It cannot start or end with a hyphen (-).",
             "Type": "String"
         },
         "QSS3KeyPrefix": {
             "AllowedPattern": "^[0-9a-zA-Z-/]*$",
-            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "ConstraintDescription": "Quick Start key prefix can include
+numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash
+(/).",
             "Default": "redhat/openshift/latest/",
-            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Description": "S3 key prefix for the Quick Start assets. Quick
+Start key prefix can include numbers, lowercase letters, uppercase letters,
+hyphens (-), and forward slash (/).",
             "Type": "String"
         },
         "RemoteAccessCIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
-            "Description": "The CIDR IP range that is permitted to access the instances We recommend that you set this value to a trusted IP range.",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/x",
+            "Description": "The CIDR IP range that is permitted to access the
+instances We recommend that you set this value to a trusted IP range.",
             "Type": "String"
         },
         "ContainerAccessCIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
-            "Description": "The CIDR IP range that is permitted to access the instances We recommend that you set this value to a trusted IP range.",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/x",
+            "Description": "The CIDR IP range that is permitted to access the
+instances We recommend that you set this value to a trusted IP range.",
             "Type": "String"
         },
         "OpenShiftAdminPassword": {
-            "Description": "Password for OpenShift Admin UI Must be at least 8 characters containing letters and (minimum 1 capital letter), numbers and symbols",
+            "Description": "Password for OpenShift Admin UI Must be at least 8
+characters",
             "Type": "String",
             "MinLength": "8",
             "MaxLength": "12",
-            "AllowedPattern": "(?=^.{6,255}$)((?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*",
+            "AllowedPattern": "(?=.*[a-z])^.*",
             "NoEcho": "true"
         },
         "RedhatSubscriptionUserName": {
@@ -249,7 +316,8 @@
             "Type": "String"
         },
         "AnsiblePlaybookType": {
-            "Description": "Note:This QuickStart only supports OpenSource-Version for Development Purposes!",
+            "Description": "Note:This QuickStart only supports
+OpenSource-Version for Development Purposes!",
             "Default": "Subscription-Version",
             "AllowedValues": [
                 "Subscription-Version",
@@ -258,86 +326,82 @@
             "Type": "String"
         },
         "AnsiblePlaybookGitRepoTag": {
-            "Description": "Only Used if [OpenSource-Version] is selected. List of Development Releases available here -> https://github.com/openshift/openshift-ansible/releases",
+            "Description": "Only Used if [OpenSource-Version] is selected.
+List of Development Releases available here ->
+https://github.com/openshift/openshift-ansible/releases",
             "Default": "3.6.173.0.5-5",
             "Type": "String"
         },
         "VPCCIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "AllowedPattern":
+"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form
+x.x.x.x/16-28",
             "Default": "10.0.0.0/16",
             "Description": "CIDR block for the VPC",
             "Type": "String"
         },
         "MasterInstanceType": {
-            "Default": "m4.xlarge",
+            "Default": "t2.medium",
             "AllowedValues": [
+                "t2.small",
+                "t2.medium",
                 "t2.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "c4.large",
-                "c4.xlarge",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge"
+                "t2.4xlarge",
+                "t2.2xlarge"
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Description": "Type of EC2 instance for the Master instances",
             "Type": "String"
         },
         "EtcdInstanceType": {
-            "Default": "m4.xlarge",
+            "Default": "t2.small",
             "AllowedValues": [
+                "t2.small",
+                "t2.medium",
                 "t2.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "c4.large",
-                "c4.xlarge",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge"
+                "t2.4xlarge",
+                "t2.2xlarge"
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Description": "Type of EC2 instance for the Etcd instances",
             "Type": "String"
         },
         "NodesInstanceType": {
-            "Default": "m4.xlarge",
+            "Default": "t2.medium",
             "AllowedValues": [
+                "t2.small",
+                "t2.medium",
                 "t2.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "c4.large",
-                "c4.xlarge",
-                "c4.2xlarge",
-                "c4.4xlarge",
-                "c4.8xlarge"
+                "t2.4xlarge",
+                "t2.2xlarge"
             ],
             "ConstraintDescription": "Must contain valid instance type",
             "Description": "Type of EC2 instance for the Node instances",
             "Type": "String"
         },
         "NumberOfMaster": {
-            "Default": "3",
-            "Description": "This Deployment requires 3 OpenShift Master instances",
+            "Default": "1",
+            "Description": "This Deployment requires 1 OpenShift Master
+instance",
             "Type": "Number",
-            "AllowedValues": ["3"]
+            "AllowedValues": [
+                "1"
+            ]
         },
         "NumberOfEtcd": {
-            "Default": "3",
-            "Description": "This Deployment requires 3 OpenShift Etcd instances",
+            "Default": "1",
+            "Description": "This Deployment requires 1 OpenShift Etcd
+instance",
             "Type": "Number",
-            "AllowedValues": ["3"]
+            "AllowedValues": [
+                "1"
+            ]
         },
         "NumberOfNodes": {
-            "Default": "3",
-            "Description": "The desired capacity for the OpenShift node instances",
+            "Default": "1",
+            "Description": "The desired capacity for the OpenShift node
+instances",
             "Type": "Number"
         }
     },
@@ -346,7 +410,8 @@
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": {
-                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template"
+                    "Fn::Sub":
+"https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template"
                 },
                 "Parameters": {
                     "AvailabilityZones": {
@@ -383,13 +448,19 @@
                         "Ref": "VPCCIDR"
                     }
                 }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "4b951f62-12af-4285-83b7-cf075fe4f9a8"
+                }
             }
         },
         "OpenShiftStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": {
-                    "Fn::Sub": "https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/openshift.template"
+                    "Fn::Sub":
+"https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/openshift.template"
                 },
                 "Parameters": {
                     "MasterInstanceType": {
@@ -470,6 +541,11 @@
                             "Outputs.VPCID"
                         ]
                     }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "bf5c614e-f1a0-44be-ac3d-0c31cd08725f"
                 }
             }
         }
