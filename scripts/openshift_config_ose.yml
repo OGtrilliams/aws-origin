@@ -29,8 +29,8 @@ os_firewall_use_firewalld=true
 # Cloud provider config
 #
 openshift_cloudprovider_kind=aws
-openshift_cloudprovider_aws_secret_key=W+SwC/UOVC9l3Qk2wSdogS5Spu2vQ2XKDOaobsxR
-openshift_cloudprovider_access_key=AKIAIF7A45F2OWAINIYQ
+openshift_cloudprovider_aws_secret_key=$KEY
+openshift_cloudprovider_access_key=$KEY2
 
 [masters]
 PUBIP openshift_hostname=master openshift_public_hostname=master.PUBIP.nip.io ansible_connection=local openshift_schedulable=true containerized=true
