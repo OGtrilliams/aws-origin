@@ -1,0 +1,305 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+
+  "Description" : ".",
+
+  "Mappings" : {  
+
+    "SubnetConfig" : {
+      "VPC1"     : { "CIDR" : "10.0.0.0/16" },
+      "Public1"   : { "CIDR" : "10.0.0.0/24" },
+      "Public2"   : { "CIDR" : "10.0.2.0/24" },
+      "Private1"   : { "CIDR" : "10.0.1.0/24" }
+    }
+  },
+
+  "Resources" : {
+    "VPC1" : {
+      "Type" : "AWS::EC2::VPC",
+      "Properties" : {
+        "EnableDnsSupport" : "true",
+
+        "EnableDnsHostnames" : "true",
+        "CidrBlock" : { "Fn::FindInMap" : [ "SubnetConfig", "VPC1", "CIDR" ]},
+        "Tags" : [
+          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+          { "Key" : "Network", "Value" : "Public" },
+          { "Key" : "Name", "Value" : "ALBlabVPC" }
+
+        ]
+      }
+    },
+
+    "PublicSubnet1" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC1" },
+        "AvailabilityZone": { "Fn::Select": [ "0", { "Fn::GetAZs": "" } ] },
+        "CidrBlock" : { "Fn::FindInMap" : [ "SubnetConfig", "Public1", "CIDR" ]},
+        "Tags" : [
+          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+          { "Key" : "Network", "Value" : "Public" },
+          { "Key" : "Name", "Value" : "Public1" }
+
+        ]
+      }
+    },
+    
+    "PublicSubnet2" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC1" },
+        "AvailabilityZone": { "Fn::Select": [ "1", { "Fn::GetAZs": "" } ] },
+        "CidrBlock" : { "Fn::FindInMap" : [ "SubnetConfig", "Public2", "CIDR" ]},
+        "Tags" : [
+          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+          { "Key" : "Network", "Value" : "Public" },
+          { "Key" : "Name", "Value" : "Public2" }
+        ]
+      }
+    },
+      "PrivateSubnet1" : {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC1" },
+        "AvailabilityZone": { "Fn::Select": [ "0", { "Fn::GetAZs": "" } ] },
+        "CidrBlock" : { "Fn::FindInMap" : [ "SubnetConfig", "Private1", "CIDR" ]},
+        "Tags" : [
+          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+          { "Key" : "Network", "Value" : "Private" },
+          { "Key" : "Name", "Value" : "Private" }
+        ]
+      }
+    },
+
+
+    "InternetGateway" : {
+      "Type" : "AWS::EC2::InternetGateway",
+      "Properties" : {
+        "Tags" : [
+          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+          { "Key" : "Network", "Value" : "Public" }
+        ]
+      }
+    },
+
+    "GatewayToInternet" : {
+      "Type" : "AWS::EC2::VPCGatewayAttachment",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC1" },
+        "InternetGatewayId" : { "Ref" : "InternetGateway" }
+      }
+    },
+    
+    "NAT" : {
+      "DependsOn" : "GatewayToInternet",
+      "Type" : "AWS::EC2::NatGateway",
+      "Properties" : {
+          "AllocationId" : { "Fn::GetAtt" : ["EIP", "AllocationId"]},
+          "SubnetId" : { "Ref" : "PublicSubnet1"}
+      }
+    },
+    
+    "EIP" : {
+    "Type" : "AWS::EC2::EIP",
+    "Properties" : {
+      "Domain" : "vpc"
+    }
+  },
+
+    "PublicRouteTable" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC1" },
+        "Tags" : [
+          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+          { "Key" : "Network", "Value" : "Public" },
+          { "Key" : "Name", "Value" : "PublicRT" }
+        ]
+      }
+    },
+
+    "PublicRoute" : {
+      "Type" : "AWS::EC2::Route",
+      "DependsOn" : "GatewayToInternet",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "PublicRouteTable" },
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "GatewayId" : { "Ref" : "InternetGateway" }
+      }
+    },
+
+    "PublicSubnetRouteTableAssociation1" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "PublicSubnet1" },
+        "RouteTableId" : { "Ref" : "PublicRouteTable" }
+      }
+    },
+	
+	  "PublicSubnetRouteTableAssociation2" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "PublicSubnet2" },
+        "RouteTableId" : { "Ref" : "PublicRouteTable" }
+      }
+    },
+    
+    "PrivateRouteTable" : {
+      "Type" : "AWS::EC2::RouteTable",
+      "Properties" : {
+        "VpcId" : { "Ref" : "VPC1" },
+        "Tags" : [
+          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
+          { "Key" : "Network", "Value" : "Private" },
+          { "Key" : "Name", "Value" : "PrivateRT" }
+        ]
+      }
+    },
+
+    "PrivateRoute" : {
+      "Type" : "AWS::EC2::Route",
+      "DependsOn" : "NAT",
+      "Properties" : {
+        "RouteTableId" : { "Ref" : "PrivateRouteTable" },
+        "DestinationCidrBlock" : "0.0.0.0/0",
+        "NatGatewayId" : { "Ref" : "NAT" }
+      }
+    },
+
+    "PrivateSubnetRouteTableAssociation1" : {
+      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties" : {
+        "SubnetId" : { "Ref" : "PrivateSubnet1" },
+        "RouteTableId" : { "Ref" : "PrivateRouteTable" }
+      }
+    },
+    
+    "EC2SecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Public Security Group",
+        "VpcId" : { "Ref" : "VPC1" },
+        "SecurityGroupIngress" : [
+          { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0" }
+
+        ]
+      }
+    },
+    
+    "EC2SecurityGroup2" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Private Security Group",
+        "VpcId" : { "Ref" : "VPC1" },
+        "SecurityGroupIngress" : [
+          { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0" }
+
+        ]
+      }
+    },
+      
+    "PublicInstance1" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "InstanceType" : "t2.micro",         
+        "ImageId" : "ami-0b33d91d",
+        "Tags" : [
+          {"Key": "Name", "Value": "Bastion"}
+           ],
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash\n",
+          "/usr/sbin/adduser linuxacademy\n",
+          "/bin/echo '123456' | /usr/bin/passwd linuxacademy --stdin\n",
+          "/bin/echo 'linuxacademy ALL=(ALL:ALL) ALL' >> /etc/sudoers\n",
+          "/bin/sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config\n",
+          "/etc/init.d/sshd reload"
+        ]]}},
+        "NetworkInterfaces" : [{
+          "GroupSet"                 : [{ "Ref" : "EC2SecurityGroup" }],
+          "AssociatePublicIpAddress": "true",
+          "DeviceIndex"              : "0",
+          "DeleteOnTermination"      : "true",
+          "SubnetId"                 : { "Ref" : "PublicSubnet1" }
+        }]
+      }
+    },
+    
+    "PrivateInstance1" : {
+      "Type" : "AWS::EC2::Instance",
+      "DependsOn" : "NAT",
+      "Properties" : {
+        "InstanceType" : "t2.micro",         
+        "ImageId"  : "ami-0b33d91d",
+        "Tags" : [
+          {"Key": "Name", "Value": "Private1"}
+           ],
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash\n",
+          "/usr/sbin/adduser linuxacademy\n",
+          "/bin/echo '123456' | /usr/bin/passwd linuxacademy --stdin\n",
+          "/bin/echo 'linuxacademy ALL=(ALL:ALL) ALL' >> /etc/sudoers\n",
+          "/bin/sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config\n",
+          "/etc/init.d/sshd reload\n",
+          "yum -y install httpd\n",
+          "/bin/echo 'server 1' >> /var/www/html/index.html\n",
+          "/bin/mkdir /var/www/html/quotes\n",
+          "/bin/echo 'Server 1 I would tell you a udp joke but you probably wouldnt get it' >> /var/www/html/quotes/index.html\n",
+          "service httpd start"
+        ]]}},
+        "NetworkInterfaces" : [{
+          "GroupSet"                 : [{ "Ref" : "EC2SecurityGroup2" }],
+          "AssociatePublicIpAddress": "false",
+          "DeviceIndex"              : "0",
+          "DeleteOnTermination"      : "true",
+          "SubnetId"                 : { "Ref" : "PrivateSubnet1" }
+        }]
+      }
+    },
+
+    "PrivateInstance2" : {
+      "Type" : "AWS::EC2::Instance",
+      "DependsOn" : "NAT",
+      "Properties" : {
+        "InstanceType" : "t2.micro",         
+        "ImageId"  : "ami-0b33d91d",
+        "Tags" : [
+          {"Key": "Name", "Value": "Private2"}
+           ],
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash\n",
+          "/usr/sbin/adduser linuxacademy\n",
+          "/bin/echo '123456' | /usr/bin/passwd linuxacademy --stdin\n",
+          "/bin/echo 'linuxacademy ALL=(ALL:ALL) ALL' >> /etc/sudoers\n",
+          "/bin/sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config\n",
+          "/etc/init.d/sshd reload\n",
+          "yum -y install httpd\n",
+          "/bin/echo 'server 2' >> /var/www/html/index.html\n",
+          "/bin/mkdir /var/www/html/quotes\n",
+          "/bin/echo 'server 2 there are 10 types of people in this world those who understand binary and those who do not.' >> /var/www/html/quotes/index.html\n",
+          "service httpd start"
+        ]]}},
+        "NetworkInterfaces" : [{
+          "GroupSet"                 : [{ "Ref" : "EC2SecurityGroup2" }],
+          "AssociatePublicIpAddress": "false",
+          "DeviceIndex"              : "0",
+          "DeleteOnTermination"      : "true",
+          "SubnetId"                 : { "Ref" : "PrivateSubnet1" }
+        }]
+      }
+    }
+ },
+
+"Outputs":{
+  "pubIpAddress1":{"Description":"Public IP of Public Instance","Value":{"Fn::GetAtt":["PublicInstance1","PublicIp"]}},
+  "privIpAddress1":{"Description":"Private IP of Private Instance","Value":{"Fn::GetAtt":["PrivateInstance1","PrivateIp"]}},
+  "privIpAddress2":{"Description":"Private IP of Private Instance","Value":{"Fn::GetAtt":["PrivateInstance2","PrivateIp"]}}
+ }  
+}
+  
+
+
+  
+
+
+
